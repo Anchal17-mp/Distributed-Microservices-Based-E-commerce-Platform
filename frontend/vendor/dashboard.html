@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vendor Dashboard - Bazaario</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <style>
+    .mobile-sidebar-toggle { display: none; }
+    @media (max-width: 960px) {
+      .dash-sidebar { display: none; }
+      .dash-sidebar.open { display: flex; position: fixed; inset: 0; z-index: 500; width: 100%; }
+      .mobile-sidebar-toggle { display: inline-flex; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="dash-shell">
+    <aside class="dash-sidebar" id="dashSidebar">
+      <a class="brand" href="../index.html"><span class="brand-mark">B</span>Bazaario</a>
+      <div class="side-user">
+        <div class="av js-vendor-avatar">V</div>
+        <div><b class="js-vendor-name">Vendor</b><span>Vendor · Approved</span></div>
+      </div>
+      <div class="side-label">Menu</div>
+      <a class="side-link is-active" href="dashboard.html">Dashboard</a>
+      <a class="side-link" href="products.html">Products</a>
+      <a class="side-link" href="orders.html">Orders</a>
+      <a class="side-link" href="inventory.html">Inventory</a>
+      <div class="side-label">Account</div>
+      <a class="side-link" href="#" onclick="vendorLogout()">Log Out</a>
+    </aside>
+
+    <main class="dash-main">
+      <div class="dash-topbar">
+        <button class="icon-btn mobile-sidebar-toggle" onclick="document.getElementById('dashSidebar').classList.toggle('open')">
+          <svg class="ic" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+        <div><h1>Vendor Dashboard</h1><p>Here's an overview of your store.</p></div>
+        <div class="dash-top-actions">
+          <button class="btn btn-primary btn-sm" onclick="window.location.href='add-product.html'">+ Add Product</button>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="card kpi-card">
+          <div class="kpi-top"><div class="kpi-ic p3"><svg class="ic" viewBox="0 0 24 24"><path d="M20 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v2M3 8h18l-1.2 11a2 2 0 0 1-2 1.8H6.2a2 2 0 0 1-2-1.8L3 8Z"/></svg></div></div>
+          <b id="activeProductsCount">—</b><span class="lbl">Active products</span>
+        </div>
+        <div class="card kpi-card">
+          <div class="kpi-top"><div class="kpi-ic p1"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M16 3v8M8 3v8M3 11h18"/></svg></div></div>
+          <b>—</b><span class="lbl">Total orders (coming soon)</span>
+        </div>
+        <div class="card kpi-card">
+          <div class="kpi-top"><div class="kpi-ic p2"><svg class="ic" viewBox="0 0 24 24"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div></div>
+          <b>—</b><span class="lbl">Total sales (coming soon)</span>
+        </div>
+        <div class="card kpi-card">
+          <div class="kpi-top"><div class="kpi-ic p4"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div></div>
+          <b>—</b><span class="lbl">Pending orders (coming soon)</span>
+        </div>
+      </div>
+
+      <div class="card panel">
+        <div class="panel-head"><h3>Recent orders</h3></div>
+        <p style="color:var(--ink-soft);font-size:13.5px;padding:12px 0">Order tracking will appear here once the Order Service is built (Phase 11).</p>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/vendor-common.js"></script>
+  <script>
+    async function loadDashboardStats() {
+      try {
+        const res = await fetch("http://127.0.0.1:8001/api/products/");
+        const products = await res.json();
+        const payload = JSON.parse(atob(localStorage.getItem("access_token").split(".")[1]));
+        const myProducts = products.filter(p => p.vendor_id === number(payload.user_id));
+        document.getElementById("activeProductsCount").textContent = myProducts.length;
+      } catch (error) {
+        document.getElementById("activeProductsCount").textContent = "0";
+      }
+    }
+    loadDashboardStats();
+  </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - Bazaario</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <style>
+    body { padding-top: 0; }
+    .site-header { top: 0; }
+    .addr-card {
+      border: 1px solid var(--line); border-radius: var(--radius-m, 10px);
+      padding: 14px 16px; margin-bottom: 10px; cursor: pointer; display: flex; gap: 12px; align-items: flex-start;
+    }
+    .addr-card.is-selected { border-color: var(--brand); background: rgba(255,90,31,.04); }
+    .addr-card input[type="radio"] { margin-top: 3px; }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="wrap navbar">
+      <a class="brand" href="index.html"><span class="brand-mark">B</span>Bazaario</a>
+      <div class="nav-cats"><a href="cart.html">← Back to cart</a></div>
+    </div>
+  </header>
+
+  <div class="wrap" style="padding:36px 28px 64px">
+    <h1 style="font-size:26px;margin-bottom:22px">Checkout</h1>
+    <div class="cart-layout" id="checkoutLayout">
+      <p style="color:var(--ink-soft);font-size:13.5px">Loading…</p>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/cart-common.js"></script>
+  <script src="js/checkout.js"></script>
+</body>
+</html>

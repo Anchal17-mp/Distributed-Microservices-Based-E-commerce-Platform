@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account - Bazaario</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="wrap navbar">
+      <a class="brand" href="index.html"><span class="brand-mark">B</span>Bazaario</a>
+      <div style="margin-left:auto;font-size:13.5px;color:var(--ink-soft)">Already have an account?
+        <a href="login.html" style="color:var(--brand);font-weight:700">Log in</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="auth-shell">
+    <div class="auth-visual">
+      <a class="brand" href="index.html"><span class="brand-mark" style="background:rgba(255,255,255,.18)">B</span>Bazaario</a>
+      <div>
+        <p class="quote">"Listed my first 40 products in a weekend — orders started the same week."</p>
+        <p class="who">— Meera Nair, Fashion Hub (Vendor since 2024)</p>
+      </div>
+    </div>
+    <div class="auth-form-wrap">
+      <div class="auth-box">
+        <h2>Create your account</h2>
+        <p class="sub">Join as a shopper or start selling in minutes.</p>
+
+        <form id="registerForm" novalidate>
+
+          <div class="field">
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" name="first_name" placeholder="Riya" required>
+            <span class="error-text" id="firstNameError"></span>
+          </div>
+
+          <div class="field">
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" name="last_name" placeholder="Sharma" required>
+            <span class="error-text" id="lastNameError"></span>
+          </div>
+
+          <div class="field">
+            <label for="email">Email address</label>
+            <input type="email" id="email" name="email" placeholder="you@example.com" required>
+            <span class="error-text" id="emailError"></span>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" placeholder="••••••••" required minlength="8">
+              <span class="error-text" id="passwordError"></span>
+            </div>
+            <div class="field">
+              <label for="phone">Phone</label>
+              <input type="tel" id="phone" name="phone" placeholder="98765 43210" required>
+              <span class="error-text" id="phoneError"></span>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="gender">Gender</label>
+              <select id="gender" name="gender" required>
+                <option value="">Select gender</option>
+                <option value="MALE">Male</option>
+                <option value="FEMALE">Female</option>
+                <option value="OTHER">Other</option>
+              </select>
+              <span class="error-text" id="genderError"></span>
+            </div>
+            <div class="field">
+              <label for="dob">Date of Birth (optional)</label>
+              <input type="date" id="dob" name="dob">
+            </div>
+          </div>
+
+          <div class="role-toggle" style="margin:20px 0">
+            <div class="role-opt is-active" id="roleCustomerCard">
+              <div class="em">🛍️</div><div class="t">Customer</div><div class="d">Shop from all vendors</div>
+            </div>
+            <div class="role-opt" id="roleVendorCard">
+              <div class="em">🏬</div><div class="t">Vendor</div><div class="d">Sell your products</div>
+            </div>
+          </div>
+          <select id="role" name="role" style="display:none">
+            <option value="CUSTOMER">Customer</option>
+            <option value="VENDOR">Vendor</option>
+          </select>
+
+          <div class="field-group vendor-only" id="businessNameGroup" style="display:none">
+            <div class="field">
+              <label for="businessName">Business Name</label>
+              <input type="text" id="businessName" name="business_name" placeholder="Your store name">
+              <span class="error-text" id="businessNameError"></span>
+            </div>
+          </div>
+
+          <div class="field-group vendor-only" id="businessDescriptionGroup" style="display:none">
+            <div class="field">
+              <label for="businessDescription">Business Description</label>
+              <textarea id="businessDescription" name="business_description" rows="3" placeholder="Tell shoppers what you sell"></textarea>
+              <span class="error-text" id="businessDescriptionError"></span>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">Create account</button>
+          <p id="formMessage" style="margin-top:14px"></p>
+        </form>
+
+        <p class="switch-line">Already registered? <a href="login.html"><b>Log in instead</b></a></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    // Visual role-card toggle, wired to the real (hidden) role select that auth.js reads
+    const roleSelectEl = document.getElementById("role");
+    const customerCard = document.getElementById("roleCustomerCard");
+    const vendorCard = document.getElementById("roleVendorCard");
+
+    function setRoleCard(role) {
+      roleSelectEl.value = role;
+      customerCard.classList.toggle("is-active", role === "CUSTOMER");
+      vendorCard.classList.toggle("is-active", role === "VENDOR");
+      roleSelectEl.dispatchEvent(new Event("change"));
+    }
+    customerCard.addEventListener("click", () => setRoleCard("CUSTOMER"));
+    vendorCard.addEventListener("click", () => setRoleCard("VENDOR"));
+  </script>
+</body>
+</html>

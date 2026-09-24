@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Dashboard - Bazaario</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <style>
+    @media (max-width: 960px) {
+      .dash-sidebar { display: none; }
+      .dash-sidebar.open { display: flex; position: fixed; inset: 0; z-index: 500; width: 100%; }
+      .mobile-sidebar-toggle { display: inline-flex !important; }
+    }
+    .mobile-sidebar-toggle { display: none; }
+  </style>
+</head>
+<body>
+
+  <div class="dash-shell">
+    <aside class="dash-sidebar" id="dashSidebar">
+      <a class="brand" href="../index.html"><span class="brand-mark">B</span>Bazaario</a>
+      <div class="side-user">
+        <div class="av js-customer-avatar">C</div>
+        <div><b class="js-customer-name">Customer</b><span>Customer</span></div>
+      </div>
+      <div class="side-label">Menu</div>
+      <a class="side-link is-active" href="dashboard.html">Overview</a>
+      <a class="side-link" href="orders.html">My Orders</a>
+      <a class="side-link" href="../products.html">Continue Shopping</a>
+      <a class="side-link" href="profile.html">Profile Settings</a>
+      <div class="side-label">Account</div>
+      <a class="side-link" href="#" onclick="customerLogout()">Log Out</a>
+    </aside>
+
+    <main class="dash-main">
+      <div class="dash-topbar">
+        <button class="icon-btn mobile-sidebar-toggle" onclick="document.getElementById('dashSidebar').classList.toggle('open')">
+          <svg class="ic" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+        <div><h1>Welcome back, <span class="js-customer-firstname">there</span> 👋</h1><p>Here's what's happening with your account.</p></div>
+        <div class="dash-top-actions">
+          <button class="btn btn-primary btn-sm" onclick="window.location.href='../products.html'">Shop again</button>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="card kpi-card">
+          <div class="kpi-top"><div class="kpi-ic p1"><svg class="ic" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M16 3v8M8 3v8M3 11h18"/></svg></div></div>
+          <b>—</b><span class="lbl">Total orders (coming soon)</span>
+        </div>
+        <div class="card kpi-card">
+          <div class="kpi-top"><div class="kpi-ic p4"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div></div>
+          <b>—</b><span class="lbl">Pending orders (coming soon)</span>
+        </div>
+        <div class="card kpi-card">
+          <div class="kpi-top"><div class="kpi-ic p3"><svg class="ic" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div></div>
+          <b>—</b><span class="lbl">Delivered orders (coming soon)</span>
+        </div>
+      </div>
+
+      <div class="card panel" style="margin-bottom:24px">
+        <div class="panel-head"><h3>Recent orders</h3></div>
+        <p style="color:var(--ink-soft);font-size:13.5px;padding:12px 0">Order tracking will appear here once the Order Service is built (Phase 11).</p>
+      </div>
+
+      <div class="panel-head"><h3>Recommended for you</h3></div>
+      <div class="prod-grid" id="recoGrid"><p style="color:var(--ink-soft);font-size:13.5px">Loading…</p></div>
+    </main>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/customer-common.js"></script>
+  <script>
+    async function loadRecommendations() {
+      try {
+        const res = await fetch("http://127.0.0.1:8001/api/products/");
+        const products = await res.json();
+        const grid = document.getElementById("recoGrid");
+        const sample = products.slice(0, 4);
+        if (sample.length === 0) {
+          grid.innerHTML = `<p style="color:var(--ink-soft);font-size:13.5px">No products available yet.</p>`;
+          return;
+        }
+        grid.innerHTML = sample.map(p => `
+          <div class="prod-card" onclick="window.location.href='../product-details.html?id=${p.id}'">
+            <div class="prod-media">🛍️</div>
+            <div class="prod-body">
+              <div class="prod-title">${p.name}</div>
+              <div class="prod-price-row"><span class="price">₹${Number(p.price).toLocaleString('en-IN')}</span></div>
+            </div>
+          </div>
+        `).join("");
+      } catch (error) {
+        document.getElementById("recoGrid").innerHTML = `<p style="color:var(--ink-soft);font-size:13.5px">Could not load recommendations.</p>`;
+      }
+    }
+    loadRecommendations();
+  </script>
+</body>
+</html>

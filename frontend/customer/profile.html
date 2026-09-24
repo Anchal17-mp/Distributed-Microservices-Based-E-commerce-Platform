@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile - Bazaario</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <style>
+    @media (max-width: 960px) {
+      .dash-sidebar { display: none; }
+      .dash-sidebar.open { display: flex; position: fixed; inset: 0; z-index: 500; width: 100%; }
+      .mobile-sidebar-toggle { display: inline-flex !important; }
+    }
+    .mobile-sidebar-toggle { display: none; }
+  </style>
+</head>
+<body>
+
+  <div class="dash-shell">
+    <aside class="dash-sidebar" id="dashSidebar">
+      <a class="brand" href="../index.html"><span class="brand-mark">B</span>Bazaario</a>
+      <div class="side-user">
+        <div class="av js-customer-avatar">C</div>
+        <div><b class="js-customer-name">Customer</b><span>Customer</span></div>
+      </div>
+      <div class="side-label">Menu</div>
+      <a class="side-link" href="dashboard.html">Overview</a>
+      <a class="side-link" href="orders.html">My Orders</a>
+      <a class="side-link" href="../products.html">Continue Shopping</a>
+      <a class="side-link is-active" href="profile.html">Profile Settings</a>
+      <div class="side-label">Account</div>
+      <a class="side-link" href="#" onclick="customerLogout()">Log Out</a>
+    </aside>
+
+    <main class="dash-main">
+      <div class="dash-topbar">
+        <button class="icon-btn mobile-sidebar-toggle" onclick="document.getElementById('dashSidebar').classList.toggle('open')">
+          <svg class="ic" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+        <div><h1>Profile Settings</h1><p>Update your personal information.</p></div>
+      </div>
+
+      <div class="card panel" style="max-width:560px">
+        <form id="profileForm">
+          <div class="field">
+            <label for="first_name">First Name</label>
+            <input type="text" id="first_name" name="first_name" required>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="last_name">Last Name</label>
+              <input type="text" id="last_name" name="last_name" required>
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" disabled>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="phone">Phone</label>
+              <input type="text" id="phone" name="phone" required>
+            </div>
+            <div class="field">
+              <label for="gender">Gender</label>
+              <select id="gender" name="gender" required>
+                <option value="MALE">Male</option>
+                <option value="FEMALE">Female</option>
+                <option value="OTHER">Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="dob">Date of Birth</label>
+            <input type="date" id="dob" name="dob">
+          </div>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+          <p id="profileMessage" style="margin-top:12px"></p>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/customer-common.js"></script>
+  <script src="../js/profile.js"></script>
+</body>
+</html>

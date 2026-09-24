@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop Products - Bazaario</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <style>
+    body { padding-top: 0; }
+    .site-header { top: 0; }
+    .mobile-nav { display: none; flex-direction: column; gap: 4px; padding: 16px 24px; background: var(--surface); border-bottom: 1px solid var(--line); }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a { padding: 10px 4px; font-size: 14.5px; font-weight: 600; color: var(--ink-soft); }
+    .mobile-nav hr { border: none; border-top: 1px solid var(--line); margin: 8px 0; }
+    @media (min-width: 961px) { .mobile-nav { display: none !important; } }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="wrap navbar">
+      <a class="brand" href="index.html"><span class="brand-mark">B</span>Bazaario</a>
+      <div class="nav-search">
+        <svg class="ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input type="text" id="searchInput" placeholder="Search for products, brands and vendors…">
+      </div>
+      <div class="nav-actions">
+        <button class="icon-btn" title="Cart" onclick="window.location.href='cart.html'">
+          <svg class="ic" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.5 3h2l2.7 12.4A2 2 0 0 0 9.1 17H18a2 2 0 0 0 2-1.6L21.5 8h-16"/></svg>
+        </button>
+        <button class="mobile-toggle icon-btn" onclick="document.getElementById('mobileNav').classList.toggle('open')">
+          <svg class="ic" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div id="mobileNav" class="mobile-nav">
+    <a href="login.html">Log In</a>
+    <a href="register.html">Sign Up</a>
+  </div>
+
+  <div class="wrap" style="padding:28px 28px 64px">
+    <div class="chip-row" id="categoryChips">
+      <span class="pill is-active" data-category="all">All</span>
+    </div>
+    <div class="listing-layout">
+      <aside class="filters-panel card">
+        <h4>Filters</h4>
+        <div class="filter-group">
+          <h5>Price range</h5>
+          <div class="range-row">
+            <input type="number" id="minPrice" placeholder="Min"> – <input type="number" id="maxPrice" placeholder="Max">
+          </div>
+        </div>
+        <div class="filter-group">
+          <h5>Availability</h5>
+          <label><input type="checkbox" id="inStockOnly"> In stock only</label>
+        </div>
+        <button class="btn btn-outline btn-block btn-sm" id="resetFiltersBtn">Reset filters</button>
+      </aside>
+
+      <div>
+        <div class="listing-top">
+          <span class="count" id="resultsCount">Loading…</span>
+          <div class="sort-select">Sort by
+            <select id="sortSelect">
+              <option value="newest">Newest</option>
+              <option value="price-low">Price: Low to High</option>
+              <option value="price-high">Price: High to Low</option>
+            </select>
+          </div>
+        </div>
+        <div class="prod-grid" id="listingGrid"><p style="color:var(--ink-soft);font-size:13.5px">Loading products…</p></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/products-listing.js"></script>
+  <script src="cart-common.js"></script>
+</body>
+</html>

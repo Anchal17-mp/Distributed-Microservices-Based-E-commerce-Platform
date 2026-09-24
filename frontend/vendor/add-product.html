@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Product - Bazaario</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/dashboard.css">
+</head>
+<body>
+
+  <div class="dash-shell">
+    <aside class="dash-sidebar">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+       <a class="brand" href="../index.html"><span class="brand-mark">B</span>Bazaario</a>
+        <button class="icon-btn mobile-sidebar-close" onclick="document.getElementById('dashSidebar').classList.remove('open')" style="display:none">✕</button>
+        </div>
+      <div class="side-user">
+        <div class="av vendorAvatar">V</div>
+        <div><b class="vendorName">Vendor</b><span>Vendor · Approved</span></div>
+      </div>
+      <div class="side-label">Menu</div>
+      <a class="side-link" href="dashboard.html">Dashboard</a>
+      <a class="side-link is-active" href="products.html">Products</a>
+      <a class="side-link" href="orders.html">Orders</a>
+      <a class="side-link" href="inventory.html">Inventory</a>
+      <div class="side-label">Account</div>
+      <a class="side-link" href="#" onclick="vendorlogout()" >Log Out</a>
+    </aside>
+
+    <main class="dash-main">
+      <div class="dash-topbar">
+        <div><h1>Add New Product</h1><p>List a new item in your store.</p></div>
+        <div class="dash-top-actions">
+          <button class="btn btn-outline btn-sm" onclick="window.location.href='products.html'">Cancel</button>
+          <button class="btn btn-primary btn-sm" id="publishBtn" form="addProductForm" type="submit">Publish Product</button>
+        </div>
+      </div>
+
+      <form id="addProductForm" novalidate>
+        <div class="form-grid">
+          <div>
+            <div class="card panel" style="margin-bottom:20px">
+              <h3 style="font-size:15px;margin-bottom:18px">Basic information</h3>
+              <div class="field">
+                <label for="productName">Product name</label>
+                <input type="text" id="productName" name="name" placeholder="e.g. iPhone 15 — 128GB, Midnight" required>
+                <span class="error-text" id="productNameError"></span>
+              </div>
+              <div class="field-row">
+                <div class="field">
+                  <label for="category">Category</label>
+                  <select id="category" name="category" required>
+                    <option value="">Select category</option>
+                  </select>
+                  <span class="error-text" id="categoryError"></span>
+                </div>
+              </div>
+              <div class="field">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" rows="5" placeholder="Describe the product, materials, and what makes it worth buying…"></textarea>
+              </div>
+            </div>
+
+            <div class="card panel">
+              <h3 style="font-size:15px;margin-bottom:18px">Pricing &amp; stock</h3>
+              <div class="field-row">
+                <div class="field">
+                  <label for="price">Price (₹)</label>
+                  <input type="number" id="price" name="price" step="0.01" min="0.01" placeholder="79999" required>
+                  <span class="error-text" id="priceError"></span>
+                </div>
+                <div class="field">
+                  <label for="stockQuantity">Stock quantity</label>
+                  <input type="number" id="stockQuantity" name="stock_quantity" min="0" placeholder="10" required>
+                  <span class="error-text" id="stockQuantityError"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="card panel">
+              <h3 style="font-size:15px;margin-bottom:14px">Product image</h3>
+              <label class="upload-box" for="productImage" style="cursor:pointer;display:block">
+                <svg class="ic" viewBox="0 0 24 24" style="width:26px;height:26px"><path d="M12 16V4M6 10l6-6 6 6"/><path d="M4 20h16"/></svg>
+                <p>Click to browse files</p>
+              </label>
+              <input type="file" id="productImage" name="image" accept="image/*" style="display:none">
+              <div class="upload-thumbs" id="imagePreview"></div>
+              <span class="error-text" id="productImageError"></span>
+            </div>
+          </div>
+        </div>
+
+        <p id="formMessage" style="margin-top:16px"></p>
+      </form>
+    </main>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/vendor-common.js"></script>
+  <script src="../js/product.js"></script>
+</body>
+</html>

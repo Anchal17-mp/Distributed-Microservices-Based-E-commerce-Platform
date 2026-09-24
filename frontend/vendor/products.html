@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Products - Bazaario</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <style>
+    @media (max-width: 960px) {
+      .dash-sidebar { display: none; }
+      .dash-sidebar.open { display: flex; position: fixed; inset: 0; z-index: 500; width: 100%; }
+      .mobile-sidebar-toggle { display: inline-flex !important; }
+    }
+    .mobile-sidebar-toggle { display: none; }
+  </style>
+</head>
+<body>
+
+  <div class="dash-shell">
+    <aside class="dash-sidebar" id="dashSidebar">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+         <a class="brand" href="../index.html"><span class="brand-mark">B</span>Bazaario</a>
+         <button class="icon-btn mobile-sidebar-close" onclick="document.getElementById('dashSidebar').classList.remove('open')" style="display:none">✕</button>
+      </div>
+
+      <div class="side-user">
+        <div class="av js-vendor-avatar">V</div>
+        <div><b class="js-vendor-name">Vendor</b><span>Vendor · Approved</span></div>
+      </div>
+      <div class="side-label">Menu</div>
+      <a class="side-link" href="dashboard.html">Dashboard</a>
+      <a class="side-link is-active" href="products.html">Products</a>
+      <a class="side-link" href="orders.html">Orders</a>
+      <a class="side-link" href="inventory.html">Inventory</a>
+      <div class="side-label">Account</div>
+      <a class="side-link" href="#" onclick="vendorLogout()">Log Out</a>
+    </aside>
+
+    <main class="dash-main">
+      <div class="dash-topbar">
+        <button class="icon-btn mobile-sidebar-toggle" onclick="document.getElementById('dashSidebar').classList.toggle('open')">
+          <svg class="ic" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+        <div><h1>My Products</h1><p>Manage listings, pricing and stock for your store.</p></div>
+        <div class="dash-top-actions">
+          <button class="btn btn-primary btn-sm" onclick="window.location.href='add-product.html'">+ Add Product</button>
+        </div>
+      </div>
+
+      <div class="card panel">
+        <div class="table-toolbar">
+          <div class="mini-search">
+            <svg class="ic" viewBox="0 0 24 24" style="width:15px;height:15px"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+            <input id="searchInput" placeholder="Search your products…">
+          </div>
+          <div class="chip-row" style="margin:0" id="filterChips">
+            <span class="pill is-active" data-filter="all">All (0)</span>
+            <span class="pill" data-filter="active">Active (0)</span>
+            <span class="pill" data-filter="low">Low stock (0)</span>
+            <span class="pill" data-filter="out">Out of stock (0)</span>
+          </div>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="productsTableBody">
+            <tr><td colspan="6" style="color:var(--ink-soft);font-size:13.5px;padding:20px 0">Loading your products…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/vendor-common.js"></script>
+  <script src="../js/vendor-products.js"></script>
+</body>
+</html>
