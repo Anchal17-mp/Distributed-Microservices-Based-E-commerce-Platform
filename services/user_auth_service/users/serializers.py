@@ -115,3 +115,7 @@ class AddressSerializer(serializers.ModelSerializer):
             'city', 'state', 'pincode', 'is_default', 'created_at',
         ]
         read_only_fields = ['id', 'created_at']
+class VendorPublicSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VendorProfile
+        fields = ['user', 'business_name']        

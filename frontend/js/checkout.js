@@ -149,7 +149,7 @@ async function placeOrder() {
     const data = await response.json();
 
     if (response.ok) {
-      showOrderConfirmation(data);
+      showPaymentStep(data);
     } else {
       alert(data.detail || "Could not place order. Please try again.");
       placeOrderBtn.disabled = false;
@@ -162,15 +162,73 @@ async function placeOrder() {
   }
 }
 
-function showOrderConfirmation(order) {
+function showPaymentStep(order) {
+  const layout = document.getElementById("checkoutLayout");
+  layout.innerHTML = `
+    <div class="card panel" style="grid-column:1/-1;max-width:480px;margin:0 auto">
+      <h3 style="font-size:16px;margin-bottom:6px">Complete Payment</h3>
+      <p style="color:var(--ink-soft);font-size:13px;margin-bottom:20px">Order #${order.id} · Amount to pay: ₹${Number(order.total_amount).toLocaleString('en-IN')}</p>
+
+      <div class="role-toggle" id="paymentMethodOptions" style="margin-bottom:20px">
+        <div class="role-opt is-active" data-method="COD"><div class="em">💵</div><div class="t">Cash on Delivery</div></div>
+        <div class="role-opt" data-method="UPI"><div class="em">📱</div><div class="t">UPI</div></div>
+        <div class="role-opt" data-method="CARD"><div class="em">💳</div><div class="t">Card</div></div>
+        <div class="role-opt" data-method="WALLET"><div class="em">👛</div><div class="t">Wallet</div></div>
+      </div>
+
+      <p style="font-size:11.5px;color:#9C9CB0;margin-bottom:16px">🔒 This is a simulated payment for demo purposes — no real transaction occurs.</p>
+
+      <button class="btn btn-primary btn-block" id="payNowBtn" onclick="submitPayment(${order.id}, ${order.total_amount})">Pay Now</button>
+    </div>
+  `;
+
+  document.querySelectorAll("#paymentMethodOptions .role-opt").forEach(opt => {
+    opt.addEventListener("click", function () {
+      document.querySelectorAll("#paymentMethodOptions .role-opt").forEach(o => o.classList.remove("is-active"));
+      this.classList.add("is-active");
+    });
+  });
+}
+
+async function submitPayment(orderId, amount) {
+  const selectedMethod = document.querySelector("#paymentMethodOptions .role-opt.is-active").dataset.method;
+  const payBtn = document.getElementById("payNowBtn");
+  payBtn.disabled = true;
+  payBtn.textContent = "Processing payment...";
+
+  try {
+    const response = await fetch("http://127.0.0.1:8004/api/payments/create/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...authHeaders() },
+      body: JSON.stringify({ order_id: orderId, amount: amount, payment_method: selectedMethod }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      showFinalConfirmation(orderId, amount, data);
+    } else {
+      alert(data.detail || "Payment failed. Please try again.");
+      payBtn.disabled = false;
+      payBtn.textContent = "Pay Now";
+    }
+  } catch (error) {
+    alert("Could not reach Payment Service. Please try again.");
+    payBtn.disabled = false;
+    payBtn.textContent = "Pay Now";
+  }
+}
+
+function showFinalConfirmation(orderId, amount, payment) {
   const layout = document.getElementById("checkoutLayout");
   layout.innerHTML = `
     <div class="card" style="padding:48px;text-align:center;grid-column:1/-1">
       <div style="font-size:44px;margin-bottom:12px">✅</div>
-      <h2 style="margin-bottom:8px">Order placed successfully!</h2>
-      <p style="color:var(--ink-soft);margin-bottom:6px">Order #${order.id} · Total ₹${Number(order.total_amount).toLocaleString('en-IN')}</p>
-      <p style="color:var(--ink-soft);font-size:13px;margin-bottom:24px">Status: ${order.status}</p>
-      <button class="btn btn-primary" onclick="window.location.href='products.html'">Continue Shopping</button>
+      <h2 style="margin-bottom:8px">Payment successful!</h2>
+      <p style="color:var(--ink-soft);margin-bottom:4px">Order #${orderId} · ₹${Number(amount).toLocaleString('en-IN')}</p>
+      <p style="color:var(--ink-soft);font-size:13px;margin-bottom:4px">Payment method: ${payment.payment_method}</p>
+      <p style="color:var(--ink-soft);font-size:12px;margin-bottom:24px">Transaction ref: ${payment.transaction_ref || 'N/A'}</p>
+      <button class="btn btn-primary" onclick="window.location.href='customer/orders.html'">View My Orders</button>
     </div>
   `;
 }

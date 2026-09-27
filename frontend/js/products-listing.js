@@ -13,16 +13,31 @@ function getUrlParam(name) {
   return new URLSearchParams(window.location.search).get(name);
 }
 
+let vendorNameMap = {};
+
+async function loadVendorNames() {
+  try {
+    const res = await fetch("http://127.0.0.1:8000/api/auth/vendors/");
+    const vendors = await res.json();
+    vendors.forEach(v => { vendorNameMap[v.user] = v.business_name; });
+  } catch (error) {
+    
+  }
+}
+
 function listingCardHTML(product) {
   const emoji = CATEGORY_EMOJI_PL[product.category_name] || "🛍️";
+  const mediaContent = product.image
+    ? `<img src="${product.image}" alt="${product.name}" style="width:100%;height:100%;object-fit:cover">`
+    : emoji;
   return `<div class="prod-card" onclick="window.location.href='product-details.html?id=${product.id}'">
-    <div class="prod-media">${emoji}</div>
+    <div class="prod-media">${mediaContent}</div>
     <div class="prod-body">
-      <span class="prod-vendor">Vendor #${product.vendor_id}</span>
+      <span class="prod-vendor">${vendorNameMap[product.vendor_id] || 'Vendor #' + product.vendor_id}</span>
       <div class="prod-title">${product.name}</div>
       <div class="prod-price-row">
         <div><span class="price">₹${Number(product.price).toLocaleString('en-IN')}</span></div>
-        <button class="add-btn" onclick="event.stopPropagation(); addToCart(${product.id})">+</button>
+    
       </div>
     </div>
   </div>`;
@@ -67,6 +82,7 @@ async function loadListingData() {
     const [catRes, prodRes] = await Promise.all([
       fetch(`${PRODUCT_API_BASE_PL}/categories/`),
       fetch(`${PRODUCT_API_BASE_PL}/products/`),
+       loadVendorNames(),
     ]);
     allCategories = await catRes.json();
     allListingProducts = await prodRes.json();

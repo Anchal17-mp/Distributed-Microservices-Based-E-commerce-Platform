@@ -9,7 +9,7 @@ function cartItemHTML(item) {
     <div class="cart-thumb">🛍️</div>
     <div><h4>${item.name}</h4><span class="prod-vendor">${item.stock_quantity} in stock</span></div>
     <div class="qty-stepper">
-      <button onclick="changeQty(${item.id}, ${item.quantity - 1})">−</button>
+      <button onclick="changeQty(${item.id}, ${item.quantity - 1})">-</button>
       <span>${item.quantity}</span>
       <button onclick="changeQty(${item.id}, ${item.quantity + 1})">+</button>
     </div>

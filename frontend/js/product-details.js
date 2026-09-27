@@ -14,11 +14,14 @@ function renderProduct(product) {
   const inStock = product.stock_quantity > 0;
 
   document.title = `${product.name} - Bazaario`;
+  const mediaContent = product.image
+  ? `<img src="${product.image}" alt="${product.name}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit">`
+  : emoji;
 
   document.getElementById("pdContent").innerHTML = `
     <div class="pd-grid">
       <div>
-        <div class="pd-gallery-main">${emoji}</div>
+        <div class="pd-gallery-main">${mediaContent}</div>
       </div>
       <div class="pd-info">
         <span class="prod-vendor">Sold by Vendor #${product.vendor_id}</span>

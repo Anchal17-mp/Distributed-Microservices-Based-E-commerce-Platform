@@ -12,8 +12,11 @@ const CATEGORY_EMOJI = {
 
 function productCardHTML(product) {
   const emoji = CATEGORY_EMOJI[product.category_name] || "🛍️";
+  const mediaContent = product.image
+    ? `<img src="${product.image}" alt="${product.name}" style="width:100%;height:100%;object-fit:cover">`
+    : emoji;
   return `<div class="prod-card" onclick="window.location.href='product-details.html?id=${product.id}'">
-    <div class="prod-media">${emoji}</div>
+    <div class="prod-media">${mediaContent}</div>
     <div class="prod-body">
       <span class="prod-vendor">Vendor #${product.vendor_id}</span>
       <div class="prod-title">${product.name}</div>
@@ -66,3 +69,9 @@ async function loadHomeData() {
 }
 
 loadHomeData();
+function goToSearch() {
+  const term = document.getElementById("homeSearchInput").value.trim();
+  if (term) {
+    window.location.href = `products.html?search=${encodeURIComponent(term)}`;
+  }
+}

@@ -68,4 +68,16 @@ from .serializers import CustomTokenObtainPairSerializer
 
 
 class CustomLoginView(TokenObtainPairView):
-    serializer_class = CustomTokenObtainPairSerializer    
+    serializer_class = CustomTokenObtainPairSerializer  
+
+
+from .serializers import VendorPublicSerializer,VendorProfile
+from rest_framework import permissions
+
+
+class VendorPublicListView(generics.ListAPIView):
+    serializer_class = VendorPublicSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def get_queryset(self):
+        return VendorProfile.objects.filter(approval_status='APPROVED')      

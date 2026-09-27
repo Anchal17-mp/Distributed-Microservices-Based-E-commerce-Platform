@@ -55,7 +55,7 @@
           <circle cx="11" cy="11" r="7" />
           <path d="M21 21l-4.3-4.3" />
         </svg>
-        <input type="text" placeholder="Search for products, brands and vendors…">
+        <input type="text" id="homeSearchInput" placeholder="Search for products, brands and vendors…" onkeypress="if(event.key==='Enter') goToSearch()">
       </div>
       <div class="nav-cats">
         <a href="products.html">Electronics</a>
@@ -278,7 +278,7 @@
 
   <script src="js/api.js"></script>
   <script src="js/main.js"></script>
-  <script src="cart-common.js"></script>
+  <script src="js/cart-common.js"></script>
 </body>
 
 </html>
