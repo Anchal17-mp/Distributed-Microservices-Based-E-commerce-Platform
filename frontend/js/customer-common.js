@@ -1,4 +1,4 @@
-const AUTH_API_BASE_C = "http://127.0.0.1:8000/api";
+const AUTH_API_BASE_C = GATEWAY_BASE;
 
 function decodeTokenC() {
   const token = localStorage.getItem("access_token");

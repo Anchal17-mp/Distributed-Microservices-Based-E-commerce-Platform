@@ -2,7 +2,7 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from .serializers import RegisterSerializer
 from .serializers import AddressSerializer
-from .models import Address
+from .models import Address ,CustomUser
 from rest_framework.permissions import IsAuthenticated  
 
 class AddressListCreateView(generics.ListCreateAPIView):
@@ -80,4 +80,46 @@ class VendorPublicListView(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
-        return VendorProfile.objects.filter(approval_status='APPROVED')      
+        return VendorProfile.objects.filter(approval_status='APPROVED')
+
+from rest_framework.exceptions import PermissionDenied
+from .serializers import AdminUserSerializer, AdminVendorSerializer
+
+
+def require_admin(user):
+    if user.role != 'ADMIN':
+        raise PermissionDenied("Admin access only.")
+
+
+class AdminUserListView(generics.ListAPIView):
+    serializer_class = AdminUserSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        require_admin(self.request.user)
+        return CustomUser.objects.all().order_by('-created_at')
+
+
+class AdminVendorListView(generics.ListAPIView):
+    serializer_class = AdminVendorSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        require_admin(self.request.user)
+        return VendorProfile.objects.all().order_by('-created_at')
+
+
+class AdminVendorUpdateView(generics.UpdateAPIView):
+    serializer_class = AdminVendorSerializer
+    permission_classes = [IsAuthenticated]
+    queryset = VendorProfile.objects.all()
+
+    def patch(self, request, *args, **kwargs):
+        require_admin(request.user)
+        vendor = self.get_object()
+        new_status = request.data.get('approval_status')
+        if new_status not in ['PENDING', 'APPROVED', 'REJECTED']:
+            return Response({"detail": "Invalid status."}, status=status.HTTP_400_BAD_REQUEST)
+        vendor.approval_status = new_status
+        vendor.save()
+        return Response(AdminVendorSerializer(vendor).data)          

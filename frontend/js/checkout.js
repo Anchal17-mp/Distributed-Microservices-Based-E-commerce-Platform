@@ -108,7 +108,7 @@ async function handleAddAddress(event) {
   };
 
   try {
-    const response = await fetch("http://127.0.0.1:8000/api/auth/addresses/", {
+    const response = await fetch(`${GATEWAY_BASE}/addresses/`, {
       method: "POST",
       headers: { "Content-Type": "application/json", ...authHeaders() },
       body: JSON.stringify(payload),
@@ -140,7 +140,7 @@ async function placeOrder() {
   placeOrderBtn.textContent = "Placing order...";
 
   try {
-    const response = await fetch("http://127.0.0.1:8003/api/orders/create/", {
+    const response = await fetch(`${GATEWAY_BASE}/orders/create/`, {
       method: "POST",
       headers: { "Content-Type": "application/json", ...authHeaders() },
       body: JSON.stringify({ shipping_address: shippingAddress }),
@@ -197,7 +197,7 @@ async function submitPayment(orderId, amount) {
   payBtn.textContent = "Processing payment...";
 
   try {
-    const response = await fetch("http://127.0.0.1:8004/api/payments/create/", {
+    const response = await fetch(`${GATEWAY_BASE}/payments/create/`, {
       method: "POST",
       headers: { "Content-Type": "application/json", ...authHeaders() },
       body: JSON.stringify({ order_id: orderId, amount: amount, payment_method: selectedMethod }),
@@ -237,7 +237,7 @@ async function loadCheckoutData() {
   try {
     const [cartRes, addrRes] = await Promise.all([
       fetch(`${CART_API_BASE}/cart/`, { headers: authHeaders() }),
-      fetch("http://127.0.0.1:8000/api/auth/addresses/", { headers: authHeaders() }),
+      fetch(`${GATEWAY_BASE}/auth/addresses/`, { headers: authHeaders() }),
     ]);
     cartData = await cartRes.json();
     addresses = await addrRes.json();

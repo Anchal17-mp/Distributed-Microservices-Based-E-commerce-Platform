@@ -67,5 +67,32 @@ class DecrementStockView(APIView):
         product.stock_quantity -= quantity
         product.save()
 
-        return Response({"detail": "Stock updated.", "remaining_stock": product.stock_quantity})            
+        return Response({"detail": "Stock updated.", "remaining_stock": product.stock_quantity})   
+    from rest_framework.exceptions import PermissionDenied
+
+
+class AdminProductListView(generics.ListAPIView):
+    serializer_class = ProductSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        if self.request.user.role != 'ADMIN':
+            raise PermissionDenied("Admin access only.")
+        return Product.objects.all().order_by('-created_at')
+
+
+class AdminProductUpdateView(generics.UpdateAPIView):
+    serializer_class = ProductSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Product.objects.all()
+
+    def patch(self, request, *args, **kwargs):
+        if request.user.role != 'ADMIN':
+            raise PermissionDenied("Admin access only.")
+        product = self.get_object()
+        is_active = request.data.get('is_active')
+        if is_active is not None:
+            product.is_active = is_active
+            product.save()
+        return Response(ProductSerializer(product).data)         
             

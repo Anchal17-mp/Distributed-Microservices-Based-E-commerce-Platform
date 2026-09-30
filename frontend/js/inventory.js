@@ -1,4 +1,4 @@
-const PRODUCT_API_BASE_INV = "http://127.0.0.1:8001/api";
+const PRODUCT_API_BASE_INV = GATEWAY_BASE;
 const LOW_STOCK_THRESHOLD_INV = 5;
 const MAX_STOCK_REFERENCE = 100; // for the visual level bar only
 

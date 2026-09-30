@@ -1,4 +1,4 @@
-const ORDER_API_BASE_D = "http://127.0.0.1:8003/api";
+const ORDER_API_BASE_D = GATEWAY_BASE;
 
 function getOrderIdFromUrl() {
   return new URLSearchParams(window.location.search).get("id");

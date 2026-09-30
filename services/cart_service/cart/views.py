@@ -48,6 +48,7 @@ class CartView(APIView):
                 "price": product['price'],
                 "image": product.get('image'),
                 "stock_quantity": product['stock_quantity'],
+                "vendor_id": product['vendor_id'],
                 "quantity": item.quantity,
                 "line_total": line_total,
             })

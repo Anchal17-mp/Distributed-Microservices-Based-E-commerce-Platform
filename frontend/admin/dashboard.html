@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Bazaario</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <style>
+    @media (max-width: 960px) {
+      .dash-sidebar { display: none; }
+      .dash-sidebar.open { display: flex; position: fixed; inset: 0; z-index: 500; width: 100%; }
+      .mobile-sidebar-toggle { display: inline-flex !important; }
+    }
+    .mobile-sidebar-toggle { display: none; }
+    .admin-tab { display: none; }
+    .admin-tab.is-active { display: block; }
+  </style>
+</head>
+<body>
+
+  <div class="dash-shell">
+    <aside class="dash-sidebar" id="dashSidebar">
+      <a class="brand" href="../index.html"><span class="brand-mark">B</span>Bazaario</a>
+      <div class="side-user">
+        <div class="av">A</div>
+        <div><b class="js-admin-email">Admin</b><span>Administrator</span></div>
+      </div>
+      <div class="side-label">Menu</div>
+      <a class="side-link is-active" href="#" data-tab="overview">Overview</a>
+      <a class="side-link" href="#" data-tab="users">Users</a>
+      <a class="side-link" href="#" data-tab="vendors">Vendors</a>
+      <a class="side-link" href="#" data-tab="products">Products</a>
+      <div class="side-label">Account</div>
+      <a class="side-link" href="#" onclick="adminLogout()">Log Out</a>
+    </aside>
+
+    <main class="dash-main">
+      <div class="dash-topbar">
+        <button class="icon-btn mobile-sidebar-toggle" onclick="document.getElementById('dashSidebar').classList.toggle('open')">
+          <svg class="ic" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+        <div><h1>Admin Dashboard</h1><p>Platform overview and management.</p></div>
+      </div>
+
+      <div id="admin-overview" class="admin-tab is-active">
+        <div class="kpi-grid">
+          <div class="card kpi-card"><b id="statTotalUsers">—</b><span class="lbl">Total users</span></div>
+          <div class="card kpi-card"><b id="statTotalVendors">—</b><span class="lbl">Total vendors</span></div>
+          <div class="card kpi-card"><b id="statPendingVendors">—</b><span class="lbl">Pending approval</span></div>
+          <div class="card kpi-card"><b id="statTotalProducts">—</b><span class="lbl">Total products</span></div>
+        </div>
+      </div>
+
+      <div id="admin-users" class="admin-tab">
+        <div class="card panel">
+          <table class="data-table">
+            <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Active</th><th>Joined</th></tr></thead>
+            <tbody id="usersTableBody"><tr><td colspan="5" style="color:var(--ink-soft);padding:20px 0">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="admin-vendors" class="admin-tab">
+        <div class="card panel">
+          <table class="data-table">
+            <thead><tr><th>Business</th><th>Owner</th><th>Email</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody id="vendorsTableBody"><tr><td colspan="5" style="color:var(--ink-soft);padding:20px 0">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="admin-products" class="admin-tab">
+        <div class="card panel">
+          <table class="data-table">
+            <thead><tr><th>Product</th><th>Vendor</th><th>Price</th><th>Stock</th><th>Active</th><th>Action</th></tr></thead>
+            <tbody id="productsTableBody"><tr><td colspan="6" style="color:var(--ink-soft);padding:20px 0">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/admin-common.js"></script>
+  <script src="../js/admin-dashboard.js"></script>
+</body>
+</html>

@@ -56,7 +56,10 @@ form.addEventListener("submit", async function (event) {
     formMessage.textContent = "Login successful! Redirecting...";
     formMessage.className = "success";
     const tokenPayload = JSON.parse(atob(result.data.access.split(".")[1]));
-    const redirectUrl = tokenPayload.role === "VENDOR" ? "vendor/dashboard.html" : "customer/dashboard.html";
+    let redirectUrl;
+    if (tokenPayload.role === "VENDOR") redirectUrl = "vendor/dashboard.html";
+    else if (tokenPayload.role === "ADMIN") redirectUrl = "admin/dashboard.html";
+    else redirectUrl = "customer/dashboard.html";
 
 
     setTimeout(() => {

@@ -1,4 +1,4 @@
-const CART_API_BASE = "http://127.0.0.1:8002/api";
+const CART_API_BASE = GATEWAY_BASE;
 
 function isLoggedIn() {
   return !!localStorage.getItem("access_token");

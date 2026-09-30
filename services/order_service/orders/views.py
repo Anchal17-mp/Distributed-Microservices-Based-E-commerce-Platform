@@ -7,7 +7,8 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from django.db import transaction
 from .models import Order, OrderItem
-from .serializers import OrderSerializer
+from .serializers import OrderSerializer,VendorOrderItemSerializer
+
 
 CART_SERVICE_URL = "http://127.0.0.1:8002/api/cart"
 PRODUCT_SERVICE_URL = "http://127.0.0.1:8001/api/products"
@@ -70,6 +71,8 @@ class OrderCreateView(APIView):
                     product_name=item['name'],
                     price=item['price'],
                     quantity=item['quantity'],
+                    vendor_id=item.get('vendor_id', 0),
+    
                 )
 
         # Step 4: decrement stock for each item (best-effort, order already exists)
@@ -126,4 +129,13 @@ class OrderUpdateStatusView(APIView):
         order.status = new_status
         order.save()
 
-        return Response({"detail": "Order status updated.", "status": order.status})    
+        return Response({"detail": "Order status updated.", "status": order.status})
+
+class VendorOrderItemsView(generics.ListAPIView):
+    serializer_class = VendorOrderItemSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        if self.request.user.role != 'VENDOR':
+            return OrderItem.objects.none()
+        return OrderItem.objects.filter(vendor_id=self.request.user.id).order_by('-order__created_at')        

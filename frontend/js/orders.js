@@ -1,4 +1,4 @@
-const ORDER_API_BASE = "http://127.0.0.1:8003/api";
+const ORDER_API_BASE = GATEWAY_BASE;
 
 function orderStatusBadge(status) {
   const map = {

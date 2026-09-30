@@ -1,4 +1,4 @@
-const PRODUCT_API_BASE_LIST = "http://127.0.0.1:8001/api";
+const PRODUCT_API_BASE_LIST = GATEWAY_BASE;
 const LOW_STOCK_THRESHOLD = 5;
 
 let allProducts = [];

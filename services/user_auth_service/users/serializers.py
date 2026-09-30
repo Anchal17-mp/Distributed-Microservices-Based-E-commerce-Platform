@@ -118,4 +118,22 @@ class AddressSerializer(serializers.ModelSerializer):
 class VendorPublicSerializer(serializers.ModelSerializer):
     class Meta:
         model = VendorProfile
-        fields = ['user', 'business_name']        
+        fields = ['user', 'business_name']
+        
+class AdminUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'first_name', 'last_name', 'email', 'role', 'is_active', 'created_at']
+
+
+class AdminVendorSerializer(serializers.ModelSerializer):
+    email = serializers.CharField(source='user.email', read_only=True)
+    full_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = VendorProfile
+        fields = ['id', 'user', 'full_name', 'email', 'business_name', 'business_description', 'approval_status', 'created_at']
+        read_only_fields = ['id', 'user', 'full_name', 'email', 'business_name', 'business_description', 'created_at']
+
+    def get_full_name(self, obj):
+        return f"{obj.user.first_name} {obj.user.last_name}"                

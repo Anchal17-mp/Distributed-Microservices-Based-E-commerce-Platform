@@ -1,4 +1,4 @@
-const PRODUCT_API_BASE_PL = "http://127.0.0.1:8001/api";
+const PRODUCT_API_BASE_PL = GATEWAY_BASE;
 
 let allListingProducts = [];
 let allCategories = [];
@@ -17,7 +17,7 @@ let vendorNameMap = {};
 
 async function loadVendorNames() {
   try {
-    const res = await fetch("http://127.0.0.1:8000/api/auth/vendors/");
+    const res = await fetch('${GATEWAY_BASE}/auth/vendors/');
     const vendors = await res.json();
     vendors.forEach(v => { vendorNameMap[v.user] = v.business_name; });
   } catch (error) {

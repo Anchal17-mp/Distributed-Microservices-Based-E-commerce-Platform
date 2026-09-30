@@ -1,4 +1,4 @@
-const PRODUCT_API_BASE = "http://127.0.0.1:8001/api";
+const PRODUCT_API_BASE = GATEWAY_BASE;
 
 const CATEGORY_EMOJI = {
   "Electronics": "📱",

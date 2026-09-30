@@ -1,4 +1,5 @@
-const API_BASE_URL = "http://127.0.0.1:8000/api";
+const GATEWAY_BASE = "http://127.0.0.1:8080/api";
+const API_BASE_URL = GATEWAY_BASE;
 
 async function apiRequest(endpoint, method = "GET", body = null, useAuth = false) {
   const headers = {
