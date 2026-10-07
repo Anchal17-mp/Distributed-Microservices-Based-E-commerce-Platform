@@ -3,14 +3,14 @@ from django.http import HttpResponse, JsonResponse
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
-
+import os
 SERVICE_MAP = {
-    'auth': 'http://127.0.0.1:8000',
-    'products': 'http://127.0.0.1:8001',
-    'categories': 'http://127.0.0.1:8001',
-    'cart': 'http://127.0.0.1:8002',
-    'orders': 'http://127.0.0.1:8003',
-    'payments': 'http://127.0.0.1:8004',
+    'auth': os.environ.get("AUTH_SERVICE_URL", "http://127.0.0.1:8000"),
+    'products': os.environ.get("PRODUCT_SERVICE_URL_BASE", "http://127.0.0.1:8001"),
+    'categories': os.environ.get("PRODUCT_SERVICE_URL_BASE", "http://127.0.0.1:8001"),
+    'cart': os.environ.get("CART_SERVICE_URL_BASE", "http://127.0.0.1:8002"),
+    'orders': os.environ.get("ORDER_SERVICE_URL_BASE", "http://127.0.0.1:8003"),
+    'payments': os.environ.get("PAYMENT_SERVICE_URL_BASE", "http://127.0.0.1:8004"),
 }
 
 

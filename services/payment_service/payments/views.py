@@ -7,7 +7,8 @@ from rest_framework.response import Response
 from .models import Payment
 from .serializers import PaymentSerializer
 
-ORDER_SERVICE_URL = "http://127.0.0.1:8003/api/orders"
+import os
+ORDER_SERVICE_URL = os.environ.get("ORDER_SERVICE_URL", "http://127.0.0.1:8003/api/orders")
 
 
 def generate_transaction_ref():

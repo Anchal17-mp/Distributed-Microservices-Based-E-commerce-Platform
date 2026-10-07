@@ -9,9 +9,9 @@ from django.db import transaction
 from .models import Order, OrderItem
 from .serializers import OrderSerializer,VendorOrderItemSerializer
 
-
-CART_SERVICE_URL = "http://127.0.0.1:8002/api/cart"
-PRODUCT_SERVICE_URL = "http://127.0.0.1:8001/api/products"
+import os
+PRODUCT_SERVICE_URL = os.environ.get("PRODUCT_SERVICE_URL", "http://127.0.0.1:8001/api/products")
+CART_SERVICE_URL = os.environ.get("CART_SERVICE_URL", "http://127.0.0.1:8002/api/cart")
 
 
 class OrderCreateView(APIView):

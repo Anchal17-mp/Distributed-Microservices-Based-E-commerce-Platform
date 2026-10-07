@@ -1,0 +1,208 @@
+services:
+
+  # =========================
+  # MYSQL DATABASE
+  # =========================
+  db:
+    image: mysql:8.0
+
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql-init:/docker-entrypoint-initdb.d
+
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-uroot",
+          "-p${MYSQL_ROOT_PASSWORD}"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+
+  # =========================
+  # AUTH SERVICE
+  # =========================
+  auth-service:
+    build: ./services/user_auth_service
+    restart: on-failure
+
+    ports:
+      - "8000:8000"
+
+    environment:
+      HOST: db
+      NAME: user_db
+      USER: root
+      PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      SECRET_KEY: ${JWT_SECRET_KEY}
+      PORT: '3306'
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+
+  # =========================
+  # PRODUCT SERVICE
+  # =========================
+  product-service:
+    build: ./services/product_service
+    restart: on-failure
+
+    ports:
+      - "8001:8000"
+
+    environment:
+      HOST: db
+      NAME: product_db
+      USER: root
+      PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      SECRET_KEY: ${JWT_SECRET_KEY}
+      PORT: '3306'
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+
+  # =========================
+  # CART SERVICE
+  # =========================
+  cart-service:
+    build: ./services/cart_service
+    restart: on-failure
+
+    ports:
+      - "8002:8000"
+
+    environment:
+      HOST: db
+      NAME: cart_db
+      USER: root
+      PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      SECRET_KEY: ${JWT_SECRET_KEY}
+      PORT: '3306'
+
+      PRODUCT_SERVICE_URL: http://product_service:8000/api/products
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+      product-service:
+        condition: service_started
+
+
+  # =========================
+  # ORDER SERVICE
+  # =========================
+  order-service:
+    build: ./services/order_service
+    restart: on-failure
+
+    ports:
+      - "8003:8000"
+
+    environment:
+      HOST: db
+      NAME: order_db
+      USER: root
+      PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      SECRET_KEY: ${JWT_SECRET_KEY}
+      PORT: '3306'
+
+      PRODUCT_SERVICE_URL: http://product_service:8000/api/products
+      CART_SERVICE_URL: http://cart_service:8000/api/cart
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+      product-service:
+        condition: service_started
+
+      cart-service:
+        condition: service_started
+
+
+  # =========================
+  # PAYMENT SERVICE
+  # =========================
+  payment-service:
+    build: ./services/payment_service
+    restart: on-failure
+
+    ports:
+      - "8004:8000"
+
+    environment:
+      HOST: db
+      NAME: payment_db
+      USER: root
+      PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      SECRET_KEY: ${JWT_SECRET_KEY}
+      PORT: '3306'
+
+      ORDER_SERVICE_URL: http://order_service:8000/api/orders
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+      order-service:
+        condition: service_started
+
+
+  # =========================
+  # API GATEWAY
+  # =========================
+  api_gateway:
+    build: ./api_gateway
+    
+
+    ports:
+      - "8080:8000"
+
+    environment:
+      SECRET_KEY: ${GATEWAY_SECRET_KEY}
+      PORT: 8000
+
+      AUTH_SERVICE_URL: http://auth-service:8000
+      PRODUCT_SERVICE_URL_BASE: http://product-service:8000
+      CART_SERVICE_URL_BASE: http://cart-service:8000
+      ORDER_SERVICE_URL_BASE: http://order-service:8000
+      PAYMENT_SERVICE_URL_BASE: http://payment-service:8000
+
+    depends_on:
+      auth-service:
+        condition: service_started
+
+      product-service:
+        condition: service_started
+
+      cart-service:
+        condition: service_started
+
+      order-service:
+        condition: service_started
+
+      payment-service:
+        condition: service_started
+
+
+# =========================
+# VOLUMES
+# =========================
+volumes:
+  mysql_data:
